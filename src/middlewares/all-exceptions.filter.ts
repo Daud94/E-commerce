@@ -26,7 +26,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const responseBody = {
       success: false,
       message:
-        exception.response.message ??
+        exception.response?.message ??
         exception.response ??
         'Something went wrong',
     };

@@ -24,7 +24,7 @@ async function bootstrap() {
   });
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
-  app.setGlobalPrefix(process.env.API_VERSION);
+  app.setGlobalPrefix(process.env['PREFIX']);
 
   const config = new DocumentBuilder()
     .setTitle('E-commerce API Documentation')
@@ -40,7 +40,7 @@ async function bootstrap() {
   });
   const adapterHost = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(adapterHost));
-  const PORT = parseInt(process.env['PORT']) || 6000;
+  const PORT = parseInt(process.env['PORT']) || 4000;
   await app.listen(PORT);
 }
 bootstrap();

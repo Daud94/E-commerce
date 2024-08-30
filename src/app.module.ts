@@ -7,7 +7,8 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { UsersModule } from './users/users.module';
 import { AllExceptionsFilter } from './middlewares/all-exceptions.filter';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
-
+import { AuthModule } from './auth/auth.module';
+import { User } from './users/users.model';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -22,10 +23,12 @@ import { APP_FILTER, APP_GUARD } from '@nestjs/core';
     ]),
     SequelizeModule.forRoot({
       dialect: 'sqlite',
-      storage: '../database/e-commerce.sqlite',
-      models: [],
+      storage: './src/database/e-commerce.sqlite',
+      logging: false,
+      models: [User],
     }),
     UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [

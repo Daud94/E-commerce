@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './users.model';
 import { AddUserDto } from './dtos/add-user.dto';
@@ -7,16 +12,30 @@ import { UsersStatus } from './enums/users-status.enum';
 import { PageOptionsDto } from '../common/dtos/page-options.dto';
 import { Op } from 'sequelize';
 import { PageMetaDto } from '../common/dtos/page-meta.dto';
+import { LoginDto } from './dtos/login.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User) private readonly userModel: typeof User) {}
+  constructor(
+    @InjectModel(User) private readonly userModel: typeof User,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async findUserById(id: number) {
     return await User.findByPk(id);
   }
 
+  async findUserByEmail(email: string) {
+    return await User.findOne({
+      where: {
+        email,
+      },
+    });
+  }
   async addUser(request: AddUserDto) {
+    const existingUser = await this.findUserByEmail(request.email);
+    if (existingUser) throw new ConflictException('User exists with the email');
     const passwordHash = await bcrypt.hash(
       request.password,
       +process.env['SALT_OR_ROUNDS'],
@@ -25,6 +44,21 @@ export class UsersService {
       ...request,
       password: passwordHash,
       status: UsersStatus.PENDING,
+    });
+  }
+
+  async login(request: LoginDto) {
+    const existingUser = await this.findUserByEmail(request.email);
+    if (!existingUser) throw new NotFoundException('Wrong email!');
+    const isMatch = await bcrypt.compare(
+      request.password,
+      existingUser.password,
+    );
+    if (!isMatch) throw new BadRequestException('Invalid login credential');
+
+    const payload = { userId: existingUser.id };
+    return await this.jwtService.signAsync(payload, {
+      secret: process.env['JWT_SECRET'],
     });
   }
 

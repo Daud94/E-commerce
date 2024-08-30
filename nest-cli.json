@@ -13,6 +13,13 @@
         }
       }
     ],
+    "assets": [
+      {
+        "include": "**/database/**/*",
+        "outDir": "dist",
+        "watchAssets": true
+      }
+    ],
     "manualRestart": true,
     "builder": {
       "type": "tsc"
