@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { SequelizeModule } from '@nestjs/sequelize';
 
 @Module({
   imports: [
@@ -16,6 +17,11 @@ import { ThrottlerModule } from '@nestjs/throttler';
         limit: 10,
       },
     ]),
+    SequelizeModule.forRoot({
+      dialect: 'sqlite',
+      storage: '../e-commerce.sqlite',
+      models: [],
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
