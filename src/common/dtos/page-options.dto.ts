@@ -16,6 +16,12 @@ export class PageOptionsDto {
   searchTerm?: string;
 
   @IsOptional()
+  minPrice?: number;
+
+  @IsOptional()
+  maxPrice?: number;
+
+  @IsOptional()
   @IsEnum(UsersStatus)
   status: string;
 
