@@ -4,7 +4,7 @@ const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../../../.env') });
 module.exports = {
   development: {
-    storage: '../../../e-commerce.sqlite',
+    storage: './e-commerce.sqlite',
     dialect: 'sqlite',
     logging: false,
     dialectOptions: {
