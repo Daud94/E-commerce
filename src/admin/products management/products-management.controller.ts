@@ -15,6 +15,8 @@ import { AdminAuthGuard } from '../../auth/guards/admin-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 import { ProductsManagementService } from './products-management.service';
 import { ProductQueryDto } from '../../products/dtos/product-query.dto';
+import { Role } from '../../auth/roles/role.enum';
+import { Roles } from '../../auth/roles/roles.decorator';
 
 @ApiTags('Admin[Products Management]')
 @Controller({ path: 'admin/products-management', version: '1' })
@@ -24,6 +26,7 @@ export class ProductsManagementController {
   ) {}
 
   @HttpCode(HttpStatus.OK)
+  @Roles(Role.ADMIN)
   @UseGuards(AdminAuthGuard)
   @Get('products')
   async viewAllProducts(@Query() query: ProductQueryDto) {
@@ -41,6 +44,7 @@ export class ProductsManagementController {
   }
 
   @HttpCode(HttpStatus.OK)
+  @Roles(Role.ADMIN)
   @UseGuards(AdminAuthGuard)
   @Get('products/:id')
   async viewProduct(@Param('id', ParseIntPipe) id: number) {
@@ -57,6 +61,7 @@ export class ProductsManagementController {
   }
 
   @HttpCode(HttpStatus.OK)
+  @Roles(Role.ADMIN)
   @UseGuards(AdminAuthGuard)
   @Patch('products/:id/suspend')
   async suspendProduct(@Param('id', ParseIntPipe) id: number) {
@@ -73,6 +78,7 @@ export class ProductsManagementController {
   }
 
   @HttpCode(HttpStatus.OK)
+  @Roles(Role.ADMIN)
   @UseGuards(AdminAuthGuard)
   @Patch('users/:id/unsuspend')
   async unsuspendProduct(@Param('id', ParseIntPipe) id: number) {
@@ -89,6 +95,7 @@ export class ProductsManagementController {
   }
 
   @HttpCode(HttpStatus.OK)
+  @Roles(...Object.values(Role))
   @UseGuards(AdminAuthGuard)
   @Delete('users/:id')
   async deleteProduct(@Param('id', ParseIntPipe) id: number) {

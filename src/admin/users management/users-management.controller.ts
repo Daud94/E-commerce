@@ -1,5 +1,6 @@
 import {
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpException,
@@ -14,6 +15,8 @@ import { UsersManagementService } from './users-management.service';
 import { UserQueryDto } from '../../users/dtos/user-query.dto';
 import { AdminAuthGuard } from '../../auth/guards/admin-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
+import { Roles } from '../../auth/roles/roles.decorator';
+import { Role } from '../../auth/roles/role.enum';
 
 @ApiTags('Admin[Users Management]')
 @Controller({ path: 'admin/users-management', version: '1' })
@@ -23,6 +26,7 @@ export class UsersManagementController {
   ) {}
 
   @HttpCode(HttpStatus.OK)
+  @Roles(Role.ADMIN)
   @UseGuards(AdminAuthGuard)
   @Get('users')
   async viewAllUsers(@Query() query: UserQueryDto) {
@@ -40,6 +44,7 @@ export class UsersManagementController {
   }
 
   @HttpCode(HttpStatus.OK)
+  @Roles(Role.ADMIN)
   @UseGuards(AdminAuthGuard)
   @Get('users/:id')
   async viewUser(@Param('id', ParseIntPipe) id: number) {
@@ -56,6 +61,7 @@ export class UsersManagementController {
   }
 
   @HttpCode(HttpStatus.OK)
+  @Roles(Role.ADMIN)
   @UseGuards(AdminAuthGuard)
   @Patch('users/:id/suspend')
   async suspendUser(@Param('id', ParseIntPipe) id: number) {
@@ -72,6 +78,7 @@ export class UsersManagementController {
   }
 
   @HttpCode(HttpStatus.OK)
+  @Roles(Role.ADMIN)
   @UseGuards(AdminAuthGuard)
   @Patch('users/:id/unsuspend')
   async unsuspendUser(@Param('id', ParseIntPipe) id: number) {
@@ -80,6 +87,23 @@ export class UsersManagementController {
       return {
         success: true,
         message: 'Suspension removed',
+        data: data,
+      };
+    } catch (e) {
+      throw new HttpException(e.response.message, e.status);
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Roles(...Object.values(Role))
+  @UseGuards(AdminAuthGuard)
+  @Delete('users/:id')
+  async deleteUserAccount(@Param('id', ParseIntPipe) id: number) {
+    try {
+      const data = await this.usersManagementService.deleteUser(id);
+      return {
+        success: true,
+        message: 'User deleted',
         data: data,
       };
     } catch (e) {

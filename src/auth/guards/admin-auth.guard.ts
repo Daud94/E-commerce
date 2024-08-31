@@ -22,6 +22,7 @@ export class AdminAuthGuard implements CanActivate {
         secret: process.env['JWT_SECRET'],
       });
       request['adminId'] = payload.adminId;
+      request['roles'] = payload.roles;
     } catch {
       throw new UnauthorizedException();
     }

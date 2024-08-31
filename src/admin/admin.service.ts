@@ -43,7 +43,7 @@ export class AdminService {
     );
     if (!isMatch) throw new BadRequestException('Invalid login credential');
 
-    const payload = { userId: existingAdmin.id };
+    const payload = { userId: existingAdmin.id, roles: existingAdmin.roles };
     return await this.jwtService.signAsync(payload, {
       secret: process.env['JWT_SECRET'],
     });

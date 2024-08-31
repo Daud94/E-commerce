@@ -25,4 +25,8 @@ export class UsersManagementService {
       UsersStatus.APPROVED,
     );
   }
+
+  async deleteUser(userId: number) {
+    return await this.usersService.deleteUser(userId);
+  }
 }

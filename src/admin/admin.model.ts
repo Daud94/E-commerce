@@ -1,5 +1,5 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
-import { Role } from './role.enum';
+import { Role } from '../auth/roles/role.enum';
 
 @Table
 export class Admin extends Model<Admin> {
@@ -16,5 +16,5 @@ export class Admin extends Model<Admin> {
   password: string;
 
   @Column({ type: DataType.ENUM(...Object.values(Role)) })
-  role: Role[];
+  roles: Role[];
 }
