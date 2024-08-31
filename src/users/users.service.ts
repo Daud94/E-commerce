@@ -12,8 +12,9 @@ import { UsersStatus } from './enums/users-status.enum';
 import { PageOptionsDto } from '../common/dtos/page-options.dto';
 import { Op } from 'sequelize';
 import { PageMetaDto } from '../common/dtos/page-meta.dto';
-import { LoginDto } from './dtos/login.dto';
+import { LoginDto } from '../common/dtos/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { UserQueryDto } from './dtos/user-query.dto';
 
 @Injectable()
 export class UsersService {
@@ -74,7 +75,7 @@ export class UsersService {
     await existingUser.update({ ...request });
   }
 
-  async getAllUsers(query: PageOptionsDto) {
+  async getAllUsers(query: UserQueryDto) {
     const { rows, count } = await this.userModel.findAndCountAll({
       where: {
         ...(query.searchTerm && {

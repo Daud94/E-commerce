@@ -1,6 +1,3 @@
-
-import { PageMetaDtoParameters } from "./page-meta-dto-parameters.interface";
-
 export class PageMetaDto {
   readonly page: number;
   readonly limit: number;
@@ -9,7 +6,7 @@ export class PageMetaDto {
   readonly hasPreviousPage: boolean;
   readonly hasNextPage: boolean;
 
-  constructor({ pageOptionsDto, itemCount }: PageMetaDtoParameters) {
+  constructor({ pageOptionsDto, itemCount }) {
     this.page = pageOptionsDto?.page;
     this.limit = pageOptionsDto?.limit;
     this.itemCount = itemCount;

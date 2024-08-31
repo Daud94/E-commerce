@@ -16,11 +16,12 @@ import {
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { AddProductDto } from './dtos/add-product.dto';
-import { UserAuthGuard } from '../auth/controllers/user-auth.guard';
+import { UserAuthGuard } from '../auth/guards/user-auth.guard';
 import { PageOptionsDto } from '../common/dtos/page-options.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { UpdateProductDto } from './dtos/update-product.dto';
 import { ProductStatus } from './enums/product-status.enum';
+import { ProductQueryDto } from './dtos/product-query.dto';
 
 @ApiTags('Products')
 @Controller({ path: 'products', version: '1' })
@@ -45,7 +46,7 @@ export class ProductsController {
   @UseGuards(UserAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get()
-  async getAllProducts(@Query() query: PageOptionsDto, @Request() req) {
+  async getAllProducts(@Query() query: ProductQueryDto, @Request() req) {
     try {
       const data = await this.productService.getAllProducts(query, req.userId);
       return {
@@ -62,7 +63,7 @@ export class ProductsController {
 
   @HttpCode(HttpStatus.OK)
   @Get('approved')
-  async getAllApprovedProducts(@Query() query: PageOptionsDto) {
+  async getAllApprovedProducts(@Query() query: ProductQueryDto) {
     try {
       const data = await this.productService.getAllProducts({
         ...query,

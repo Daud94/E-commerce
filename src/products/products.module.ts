@@ -3,12 +3,12 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Product } from './product.model';
 import { ProductsService } from './products.service';
 import { ProductsController } from './products.controller';
-import { AuthModule } from '../auth/auth.module';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
-  imports: [SequelizeModule.forFeature([Product]), AuthModule],
-  providers: [ProductsService],
+  imports: [SequelizeModule.forFeature([Product])],
+  providers: [ProductsService, JwtService],
   controllers: [ProductsController],
-  exports: [ProductsModule],
+  exports: [ProductsService],
 })
 export class ProductsModule {}

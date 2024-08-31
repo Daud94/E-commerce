@@ -11,6 +11,7 @@ import { AuthModule } from './auth/auth.module';
 import { User } from './users/users.model';
 import { ProductsModule } from './products/products.module';
 import { Product } from './products/product.model';
+import { AdminModule } from './admin/admin.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -44,6 +45,7 @@ import { Product } from './products/product.model';
     UsersModule,
     AuthModule,
     ProductsModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [

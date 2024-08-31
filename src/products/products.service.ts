@@ -4,9 +4,11 @@ import { InjectModel } from '@nestjs/sequelize';
 import { AddProductDto } from './dtos/add-product.dto';
 import { ProductStatus } from './enums/product-status.enum';
 import { UpdateProductDto } from './dtos/update-product.dto';
-import { PageOptionsDto } from '../common/dtos/page-options.dto';
 import { Op } from 'sequelize';
 import { PageMetaDto } from '../common/dtos/page-meta.dto';
+import { ProductQueryDto } from './dtos/product-query.dto';
+import { User } from '../users/users.model';
+import { UsersStatus } from '../users/enums/users-status.enum';
 
 @Injectable()
 export class ProductsService {
@@ -20,6 +22,12 @@ export class ProductsService {
         id,
         ...(userId && { userId: userId }),
       },
+      include: [
+        {
+          model: User,
+          attributes: ['id', 'firstName', 'lastName', 'email'],
+        },
+      ],
     });
   }
 
@@ -37,7 +45,13 @@ export class ProductsService {
     await existingProduct.update({ ...request });
   }
 
-  async getAllProducts(query: PageOptionsDto, userId?: number) {
+  async changeProductStatus(id: number, status: ProductStatus) {
+    const existingProduct = await this.findProductById(id);
+    if (!existingProduct) throw new NotFoundException('Product not found');
+    await existingProduct.update({ status: status });
+  }
+
+  async getAllProducts(query: ProductQueryDto, userId?: number) {
     const { rows, count } = await this.productModel.findAndCountAll({
       where: {
         ...(userId && { userId: userId }),

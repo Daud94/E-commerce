@@ -10,7 +10,7 @@ import {
 import { UsersService } from '../../users/users.service';
 import { AddUserDto } from '../../users/dtos/add-user.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { LoginDto } from '../../users/dtos/login.dto';
+import { LoginDto } from '../../common/dtos/login.dto';
 
 @ApiTags('Users Authentication')
 @Controller({ path: 'auth', version: '1' })
