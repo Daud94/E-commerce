@@ -10,6 +10,7 @@ import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
 import { User } from './users/users.model';
 import { ProductsModule } from './products/products.module';
+import { Product } from './products/product.model';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -23,10 +24,22 @@ import { ProductsModule } from './products/products.module';
       },
     ]),
     SequelizeModule.forRoot({
-      dialect: 'sqlite',
-      storage: './src/database/e-commerce.sqlite',
+      username: process.env['DB_USER'],
+      password: process.env['DB_PASSWORD'],
+      database: process.env['DB_NAME'],
+      host: process.env['DB_HOST'],
+      port: +process.env['DB_PORT'],
+      dialect: 'postgres',
+      autoLoadModels: true,
       logging: false,
-      models: [User],
+      dialectOptions: {
+        bigNumberStrings: true,
+        decimalNumbers: true,
+        ssl: {
+          require: false,
+          rejectUnauthorized: false,
+        },
+      },
     }),
     UsersModule,
     AuthModule,

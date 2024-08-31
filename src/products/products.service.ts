@@ -14,8 +14,13 @@ export class ProductsService {
     @InjectModel(Product) private readonly productModel: typeof Product,
   ) {}
 
-  async findProductById(id: number) {
-    return await this.productModel.findByPk(id);
+  async findProductById(id: number, userId?: number) {
+    return await this.productModel.findOne({
+      where: {
+        id,
+        ...(userId && { userId: userId }),
+      },
+    });
   }
 
   async addProduct(userId: number, request: AddProductDto) {
@@ -26,36 +31,41 @@ export class ProductsService {
     });
   }
 
-  async updateProduct(id: number, request: UpdateProductDto) {
-    const existingProduct = await this.findProductById(id);
+  async updateProduct(id: number, request: UpdateProductDto, userId?: number) {
+    const existingProduct = await this.findProductById(id, userId);
     if (!existingProduct) throw new NotFoundException('Product not found');
     await existingProduct.update({ ...request });
   }
 
-  async getAllProducts(query: PageOptionsDto) {
+  async getAllProducts(query: PageOptionsDto, userId?: number) {
     const { rows, count } = await this.productModel.findAndCountAll({
       where: {
-        [Op.or]: [
-          {
-            name: {
-              [Op.iLike]: `%${query.searchTerm}`,
+        ...(userId && { userId: userId }),
+        ...(query.searchTerm && {
+          [Op.or]: [
+            {
+              name: {
+                [Op.iLike]: `%${query.searchTerm}`,
+              },
             },
-          },
-          {
-            description: {
-              [Op.iLike]: `%${query.searchTerm}`,
+            {
+              description: {
+                [Op.iLike]: `%${query.searchTerm}`,
+              },
             },
-          },
-        ],
+          ],
+        }),
         ...(query.minPrice &&
           query.maxPrice && {
             price: {
               [Op.between]: [query.minPrice, query.maxPrice],
             },
           }),
+        ...(query.status && { status: query.status }),
       },
       offset: query.offset,
       limit: query.limit,
+      order: [['id', 'DESC']],
     });
 
     const metadata = new PageMetaDto({
@@ -69,8 +79,9 @@ export class ProductsService {
     };
   }
 
-  async deleteProduct(id: number) {
-    const existingProduct = await this.findProductById(id);
+  async deleteProduct(id: number, userId?: number) {
+    const existingProduct = await this.findProductById(id, userId);
     if (!existingProduct) throw new NotFoundException('Product not found');
+    await existingProduct.destroy();
   }
 }
