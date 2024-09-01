@@ -8,8 +8,8 @@ import {
   HttpStatus,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
-  Put,
   Query,
   Request,
   UseGuards,
@@ -204,7 +204,7 @@ export class ProductsController {
   @ApiOkResponse({ description: 'Product updated' })
   @UseGuards(UserAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @Put(':id')
+  @Patch(':id')
   async updateProduct(
     @Param('id', ParseIntPipe) id: number,
     @Body() request: UpdateProductDto,

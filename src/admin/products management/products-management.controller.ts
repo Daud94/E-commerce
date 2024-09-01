@@ -149,7 +149,7 @@ export class ProductsManagementController {
   @HttpCode(HttpStatus.OK)
   @Roles(Role.ADMIN)
   @UseGuards(AdminAuthGuard)
-  @Patch('users/:id/unsuspend')
+  @Patch('products/:id/unsuspend')
   async unsuspendProduct(@Param('id', ParseIntPipe) id: number) {
     try {
       await this.productsManagementService.unsuspendProduct(id);
@@ -173,7 +173,7 @@ export class ProductsManagementController {
   @HttpCode(HttpStatus.OK)
   @Roles(...Object.values(Role))
   @UseGuards(AdminAuthGuard)
-  @Delete('users/:id')
+  @Delete('products/:id')
   async deleteProduct(@Param('id', ParseIntPipe) id: number) {
     try {
       await this.productsManagementService.deleteProduct(id);
