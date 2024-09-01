@@ -18,7 +18,7 @@ export class ProductsManagementService {
   async suspendProduct(productId: number) {
     return await this.productsService.changeProductStatus(
       productId,
-      ProductStatus.BANNED,
+      ProductStatus.SUSPENDED,
     );
   }
 

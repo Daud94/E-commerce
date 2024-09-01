@@ -1,85 +1,147 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Basic E-commerce API
+## Overview
+This project is a simple e-commerce system built with NestJS for the backend API. It provides functionalities for 
+user management, product management, and an admin panel for managing both users and products.
+## Features
+- Authentication Endpoint:
+  - User Authentication
+    - User registration
+    - User signin
+  - Admin Authentication
+    - Admin signin
+    
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+- Product Endpoint
+  - User adds product
+  - User fetch a product
+  - User fetches all products
+  - User (including unauthenticated user) fetches all approved products
+  - User updates a product
+  - User deletes a product
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+- Admin[Users Management]
+  - Admin fetches all users
+  - Admin fetches a user details
+  - Admin suspends a user
+  - Admin unsuspend/approve a user
+  - Admin deletes a user
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Project setup
+- Admin[Products Management]
+    - Admin fetches all products
+    - Admin fetches a product details
+    - Admin suspends a product
+    - Admin unsuspend/approve a product
+    - Admin deletes a product
 
-```bash
-$ npm install
+## Prerequisites
+- NodeJs
+- ExpressJS
+- Sqlite
+- Postman for API testing
+## Getting Started
+### Clone the Repository
+```angular2html
+git clone https://github.com/Daud94/pataverse-assessment.git
+cd petaverse-assessment
+```
+### Configuration
+Create a `.env` file in the root directory with the following content:
+```angular2html
+NODE_ENV=
+SALT=
+JWT_SECRET=
+```
+`NODE_ENV` can either be `development` or `production`. For this app, it should be set to development.
+`SALT` should be a numeric value (e.g 10)
+`JWT_SECRET` could be any string of your choice but should be secured enough.
+
+### Installation
+Install all dependencies from the `package.json` file:
+```angular2html
+npm install
+```
+Run the application:
+```angular2html
+npm run dev
+```
+### Database Migration
+Apply migrations to the SQLite database:
+```angular2html
+npm run migrate
 ```
 
-## Compile and run the project
+### API Endpoints
+**Authentication Endpoint**
+POST `/api/auth/signup`
+- Allows user to signup
+  POST `/api/auth/signin`
+- Allows user to signin
+  PUT `/api/auth/verify-otp`
+- After user signup, a six-digit OTP is sent to the user. This endpoint allows verification of the otp.
+  POST `/api/auth/resend-otp`
+- Allows user to regenerate a new otp if previous one expires.
 
-```bash
-# development
-$ npm run start
+### Authentication
+The API uses JWT (JSON Web Token) for authentication. After logging in, you will receive a token which must be included in the Authorization header of subsequent requests.
 
-# watch mode
-$ npm run start:dev
+### Signup
+Endpoint: POST `/api/auth/signup`
 
-# production mode
-$ npm run start:prod
+Request body:
+```json
+{
+  "firstName": "your_first_name",
+  "lastName": "your_last_name",
+  "email": "your_email",
+  "password": "your_password"
+}
 ```
+### Signin
+Endpoint: POST `/api/auth/signin`
 
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+Request body:
+```json
+{
+  "email": "your_email",
+  "password": "your_password"
+}
 ```
+### Verify OTP
+Endpoint: PUT `/api/auth/verify-otp`
 
-## Resources
+Request body:
+```json
+{
+  "email": "your_email",
+  "emailToken": "your_OTP"
+}
+```
+### Resend OTP
+Endpoint: POST `/api/auth/resend-otp`
 
-Check out a few resources that may come in handy when working with NestJS:
+Request body:
+```json
+{
+  "email": "your_email"
+}
+```
+### API Testing
+In the project root directory is a postman collection - `Petaverse.postman_collection.json` for the APIs. Import it as
+a collection in your postman. The app is set to run local host; port 3000. You can then start testing the API.
+_NOTE:_ Otp sent to the user as a response instead of an email. This is to ease testing as email integration may
+take some time to set up. However, to allow sending of otp an email using one's gmail account, simply follow the setup
+below:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+### Mail Setup
+Follow the steps with the heading in [Google Cloud Platform Configurations](https://www.freecodecamp.org/news/use-nodemailer-to-send-emails-from-your-node-js-server/)
+and generate the values for the keys below and add them to your  `.env` file:
+```angular2html
+MAIL_USERNAME=
+MAIL_PASSWORD=
+OAUTH_CLIENTID=
+OAUTH_CLIENT_SECRET=
+OAUTH_REFRESH_TOKEN=
+```
+Uncomment line 28 in `auth.controller.js` and line 168 in controllers directory

@@ -16,7 +16,10 @@ export class UsersManagementService {
   }
 
   async suspendUser(userId: number) {
-    return await this.usersService.changeUserStatus(userId, UsersStatus.BANNED);
+    return await this.usersService.changeUserStatus(
+      userId,
+      UsersStatus.SUSPENDED,
+    );
   }
 
   async unsuspendUser(userId: number) {
