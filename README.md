@@ -1,7 +1,10 @@
 # Basic E-commerce API
 ## Overview
-This project is a simple e-commerce system built with NestJS for the backend API. It provides functionalities for 
-user management, product management, and an admin panel for managing both users and products.
+This project is a simple e-commerce system built with NestJS for the backend API. This e-commerce system provides a 
+robust API for managing users and products with role-based access control. The primary objectives include creating a 
+secure, maintainable system where users can register, manage their products, and view approved products, while admins 
+can oversee user activities and product approvals. Comprehensive API documentation is provided using Swagger to ensure 
+clarity and ease of use for developers.
 
 ## Objectives
 * Implement a secure and maintainable e-commerce API with role-based access control.

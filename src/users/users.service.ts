@@ -3,6 +3,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './users.model';
@@ -56,6 +57,10 @@ export class UsersService {
       existingUser.password,
     );
     if (!isMatch) throw new BadRequestException('Invalid login credential');
+
+    if (existingUser.status === UsersStatus.SUSPENDED) {
+      throw new UnauthorizedException('Your account has been suspended');
+    }
 
     const payload = { userId: existingUser.id };
     return await this.jwtService.signAsync(payload, {
