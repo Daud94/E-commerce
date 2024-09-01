@@ -4,11 +4,11 @@ import { ProductStatus } from '../enums/product-status.enum';
 
 export class ProductQueryDto {
   @IsOptional()
-  searchTerm: string;
+  searchTerm?: string;
 
   @IsOptional()
   @IsEnum(ProductStatus)
-  status: string;
+  status?: string;
 
   @IsOptional()
   minPrice?: number;

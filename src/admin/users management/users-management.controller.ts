@@ -14,10 +14,11 @@ import {
 import { UsersManagementService } from './users-management.service';
 import { UserQueryDto } from '../../users/dtos/user-query.dto';
 import { AdminAuthGuard } from '../../auth/guards/admin-auth.guard';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../../auth/roles/roles.decorator';
 import { Role } from '../../auth/roles/role.enum';
 
+@ApiBearerAuth('admin-auth')
 @ApiTags('Admin[Users Management]')
 @Controller({ path: 'admin/users-management', version: '1' })
 export class UsersManagementController {

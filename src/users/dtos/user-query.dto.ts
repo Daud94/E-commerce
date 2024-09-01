@@ -4,11 +4,11 @@ import { Type } from 'class-transformer';
 
 export class UserQueryDto {
   @IsOptional()
-  searchTerm: string;
+  searchTerm?: string;
 
   @IsOptional()
   @IsEnum(UsersStatus)
-  status: string;
+  status?: string;
 
   @Type(() => Number)
   @IsInt()

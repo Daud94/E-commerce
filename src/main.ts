@@ -26,18 +26,34 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.setGlobalPrefix(process.env['PREFIX']);
 
+  app.enableVersioning({
+    type: VersioningType.URI,
+  });
+
   const config = new DocumentBuilder()
     .setTitle('E-commerce API Documentation')
     .setDescription('E-commerce API Documentation')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        name: 'user-auth',
+      },
+      'user-auth',
+    )
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        name: 'admin-auth',
+      },
+      'admin-auth',
+    )
     .setVersion('v1')
-    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
-  app.enableVersioning({
-    type: VersioningType.URI,
-  });
   const adapterHost = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(adapterHost));
   const PORT = parseInt(process.env['PORT']) || 4000;

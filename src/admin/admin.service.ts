@@ -10,8 +10,6 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { ProductsService } from '../products/products.service';
 import { UsersService } from '../users/users.service';
-import { UserQueryDto } from '../users/dtos/user-query.dto';
-import { UsersStatus } from '../users/enums/users-status.enum';
 
 @Injectable()
 export class AdminService {
@@ -26,7 +24,7 @@ export class AdminService {
     return await this.adminModel.findByPk(id);
   }
 
-  private async findUserByEmail(email: string) {
+  private async findAdminByEmail(email: string) {
     return await this.adminModel.findOne({
       where: {
         email,
@@ -35,7 +33,7 @@ export class AdminService {
   }
 
   async login(request: LoginDto) {
-    const existingAdmin = await this.findUserByEmail(request.email);
+    const existingAdmin = await this.findAdminByEmail(request.email);
     if (!existingAdmin) throw new NotFoundException('Wrong email!');
     const isMatch = await bcrypt.compare(
       request.password,

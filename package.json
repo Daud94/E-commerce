@@ -20,7 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "migrate": "cd src/database && npx sequelize-cli db:migrate",
     "migrate:undo": "cd src/database && npx sequelize-cli db:migrate:undo",
-    "seed:all": "cd src/db && npx sequelize-cli db:seed:all"
+    "seed:all": "cd src/database && npx sequelize-cli db:seed:all"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

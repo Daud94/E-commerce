@@ -4,10 +4,7 @@ import { Role } from '../auth/roles/role.enum';
 @Table
 export class Admin extends Model<Admin> {
   @Column({ type: DataType.STRING })
-  firstName: string;
-
-  @Column({ type: DataType.STRING })
-  lastName: string;
+  name: string;
 
   @Column({ type: DataType.STRING })
   email: string;
