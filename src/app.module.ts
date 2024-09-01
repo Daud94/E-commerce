@@ -8,10 +8,9 @@ import { UsersModule } from './users/users.module';
 import { AllExceptionsFilter } from './middlewares/all-exceptions.filter';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
-import { User } from './users/users.model';
 import { ProductsModule } from './products/products.module';
-import { Product } from './products/product.model';
 import { AdminModule } from './admin/admin.module';
+import { CacheModule } from '@nestjs/cache-manager';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -42,6 +41,7 @@ import { AdminModule } from './admin/admin.module';
         },
       },
     }),
+    CacheModule.register(),
     UsersModule,
     AuthModule,
     ProductsModule,

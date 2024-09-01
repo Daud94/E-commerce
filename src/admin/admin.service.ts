@@ -16,8 +16,6 @@ export class AdminService {
   constructor(
     @InjectModel(Admin) private readonly adminModel: typeof Admin,
     private readonly jwtService: JwtService,
-    private readonly productsService: ProductsService,
-    private readonly usersService: UsersService,
   ) {}
 
   async getAdminById(id: number) {

@@ -9,8 +9,10 @@ clarity and ease of use for developers.
 ## Objectives
 * Implement a secure and maintainable e-commerce API with role-based access control.
 * Allow users to register, manage their products, and view approved products.
+* Suspended users shouldn't be allowed to log in.
 * Empower admins to manage users, approve/disapprove products, and access a dedicated user management panel.
 * Provide comprehensive API documentation using Swagger.
+* Query optimization through pagination and caching.
 
 ## Features
 - Authentication Endpoint:
@@ -23,7 +25,7 @@ clarity and ease of use for developers.
 
 - Product Endpoint
   - User adds product
-  - User fetch a product
+  - User fetches a product
   - User fetches all products
   - User (including unauthenticated user) fetches all approved products
   - User updates a product
@@ -34,7 +36,7 @@ clarity and ease of use for developers.
   - Admin fetches all users
   - Admin fetches a user details
   - Admin suspends a user
-  - Admin unsuspend/approve a user
+  - Admin unsuspends/approves a user
   - Admin deletes a user
 
 
@@ -63,6 +65,7 @@ JWT_SECRET=
 NODE_ENV=
 PREFIX=
 SALT_OR_ROUNDS=
+CACHE_TTL=
 PORT=
 DB_USER=
 DB_PASSWORD=
@@ -80,6 +83,7 @@ running this command in your terminal:
 - `NODE_ENV` holds a string value for specifying the deployment environment. It can be "development", "test" or "production".
 - `PREFIX` holds a string value for global API prefix to routes e.g `/products` would be `/api/products`.
 - `SALT_OR_ROUNDS` holds an integer value for to store SALT value for bcrypt hashing function.
+- `CACHE_TTL` Cache expiration time
 - `PORT` holds integer value for the API port the app runs on.
 - `DB_USER` Postgres database username.
 - `DB_PASSWORD` Postgres database password.
@@ -422,3 +426,12 @@ Documentation for the remaining APIs can be found via swagger. It can be found v
 where `HOST` can be `http://localhost` if it is development and `PORT` is the port the app is running on, say `3000`.
 ### API Testing
 The API can be tested on swagger
+
+### OPTIMIZATION
+All queries where there is the possibility of retrieving large datasets are paginated and cached for the time specified.
+For this project's scope, 60,000 milliseconds (1 minute) is set in the `env` file.The caching is done by employing
+Nest's Cache Manager, which provides in-memory caching. An alternative to this is REDIS.
+  - GET `/api/v1/products`
+  - GET `/api/v1/products/approved`
+  - GET `/api/v1/admin/users-management/users`
+  - GET `/api/v1/admin/products-management/products`

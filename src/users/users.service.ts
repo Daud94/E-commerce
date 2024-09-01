@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ConflictException,
+  Inject,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -10,18 +11,20 @@ import { User } from './users.model';
 import { AddUserDto } from './dtos/add-user.dto';
 import * as bcrypt from 'bcrypt';
 import { UsersStatus } from './enums/users-status.enum';
-import { PageOptionsDto } from '../common/dtos/page-options.dto';
 import { Op } from 'sequelize';
 import { PageMetaDto } from '../common/dtos/page-meta.dto';
 import { LoginDto } from '../common/dtos/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { UserQueryDto } from './dtos/user-query.dto';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User) private readonly userModel: typeof User,
     private readonly jwtService: JwtService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async findUserById(id: number) {
@@ -81,6 +84,10 @@ export class UsersService {
   }
 
   async getAllUsers(query: UserQueryDto) {
+    const value: any = await this.cacheManager.get('ALL_USERS');
+    if (value) {
+      return value;
+    }
     const { rows, count } = await this.userModel.findAndCountAll({
       where: {
         ...(query.searchTerm && {
@@ -111,9 +118,16 @@ export class UsersService {
       itemCount: count,
     });
 
+    if (rows.length !== 0) {
+      await this.cacheManager.set(
+        'ALL_USERS',
+        { rows, metadata },
+        +process.env['CACHE_TTL'],
+      );
+    }
     return {
-      rows,
-      metadata,
+      rows: rows,
+      metadata: metadata,
     };
   }
 
